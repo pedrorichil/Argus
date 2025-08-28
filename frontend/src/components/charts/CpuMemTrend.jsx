@@ -7,16 +7,11 @@ import { themeColors } from '../../utils/colors';
 const createGradient = (context, rgbColor) => {
   const chart = context.chart;
   const { ctx, chartArea } = chart;
-
-  if (!chartArea) {
-    return null;
-  }
-  
+  if (!chartArea) return null;
   const gradient = ctx.createLinearGradient(0, chartArea.bottom, 0, chartArea.top);
-  gradient.addColorStop(0, `rgba(${rgbColor}, 0)`);      
-  gradient.addColorStop(0.5, `rgba(${rgbColor}, 0.2)`); 
-  gradient.addColorStop(1, `rgba(${rgbColor}, 0.5)`); 
-  
+  gradient.addColorStop(0, `rgba(${rgbColor}, 0)`);
+  gradient.addColorStop(0.5, `rgba(${rgbColor}, 0.2)`);
+  gradient.addColorStop(1, `rgba(${rgbColor}, 0.5)`);
   return gradient;
 };
 
@@ -27,48 +22,24 @@ const chartOptions = {
     y: {
       beginAtZero: true,
       max: 100,
-      ticks: {
-        color: themeColors.textMuted,
-        callback: (value) => `${value}%`,
-      },
-      grid: {
-        color: themeColors.border, 
-      },
+      ticks: { color: themeColors.textMuted, callback: (value) => `${value}%` },
+      grid: { color: themeColors.border },
     },
     x: {
-      ticks: {
-        display: false,
-      },
-      grid: {
-        display: false, 
-      },
+      ticks: { display: false },
+      grid: { display: false },
     },
   },
   elements: {
-    point: {
-      radius: 0,
-      hoverRadius: 6, 
-      backgroundColor: 'white',
-      borderColor: 'white',
-    },
-    line: {
-      borderWidth: 2,
-      tension: 0.4, 
-    },
+    point: { radius: 0, hoverRadius: 6, backgroundColor: 'white', borderColor: 'white' },
+    line: { borderWidth: 2, tension: 0.4 },
   },
   plugins: {
     legend: {
       display: true,
       position: 'top',
       align: 'end',
-      labels: {
-        color: themeColors.text,
-        boxWidth: 12,
-        padding: 20,
-        font: {
-          size: 14,
-        }
-      },
+      labels: { color: themeColors.text, boxWidth: 12, padding: 20, font: { size: 14 } },
     },
     tooltip: {
       mode: 'index',
@@ -85,17 +56,16 @@ const chartOptions = {
   }
 };
 
-
 const CpuMemTrend = ({ cpuData = [], ramData = [] }) => {
   const chartData = {
-    labels: cpuData.map((_, index) => index), 
+    labels: cpuData.map((_, index) => index),
     datasets: [
       {
         label: 'CPU',
         data: cpuData,
         borderColor: themeColors.cyan,
         fill: true,
-        backgroundColor: (context) => createGradient(context, '34, 211, 238'), 
+        backgroundColor: (context) => createGradient(context, '34, 211, 238'),
       },
       {
         label: 'RAM',
@@ -109,7 +79,7 @@ const CpuMemTrend = ({ cpuData = [], ramData = [] }) => {
 
   return (
     <Card title="Tendência de Uso (CPU & RAM)" icon={FaChartArea}>
-      <div className="h-full min-h-[250px] md:min-h-[300px]">
+      <div className="relative h-64 md:h-72">
         <Line data={chartData} options={chartOptions} />
       </div>
     </Card>

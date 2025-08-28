@@ -1,19 +1,22 @@
 import React from 'react';
-import { FaServer } from 'react-icons/fa';
+import Clock from './Clock';
+import argusIcon from '/logo.png';
 
-const Header = ({ isConnected }) => {
+const Header = ({ isConnected, latency }) => {
   return (
-    <header className="mb-6">
+    <header className="flex justify-between items-center mb-6">
       <div className="flex items-center gap-4">
-        <FaServer className="text-3xl text-cyan-400" />
+        <img src={argusIcon} alt="Argus Icon" className="h-10 w-10" />
         <div>
-          <h1 className="text-3xl font-bold text-white">Argus API Dashboard</h1>
-          <div className="flex items-center gap-2 text-sm">
-            <div className={`w-3 h-3 rounded-full ${isConnected ? 'bg-green-500 animate-pulse' : 'bg-red-500'}`}></div>
-            <span>{isConnected ? 'Conectado ao Servidor' : 'Desconectado'}</span>
+          <h1 className="text-2xl font-bold text-white">Argus – Dashboard de Monitoramento</h1>
+          <div className="flex items-center gap-2 text-sm text-theme-text-muted">
+            <div className={`w-3 h-3 rounded-full ${isConnected ? 'bg-green-500' : 'bg-red-500'}`}></div>
+            <span>{isConnected ? `Sistema Online – ${latency}ms` : 'Desconectado'}</span>
           </div>
         </div>
       </div>
+      
+      <Clock />
     </header>
   );
 };

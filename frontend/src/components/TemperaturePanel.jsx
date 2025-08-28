@@ -1,35 +1,36 @@
 import React from 'react';
 import Card from './Card';
-import { FaTemperatureHigh, FaThermometerHalf, FaFan } from 'react-icons/fa';
+import { FaThermometerHalf, FaFan } from 'react-icons/fa';
 import { SiNvidia } from 'react-icons/si';
 
-const TempItem = ({ icon, label, value, unit }) => {
-  const Icon = icon;
-  return (
-    <div className="flex items-center justify-between text-sm">
-      <div className="flex items-center gap-2 text-gray-300">
-        <Icon />
-        <span>{label}</span>
-      </div>
-      <span className="font-mono font-bold text-white">
-        {value ?? 'N/A'}
-        {value && unit}
-      </span>
-    </div>
-  );
+const getTempStatus = (temp) => {
+    if (temp === null || temp === undefined) return { color: 'text-gray-400', label: 'N/A' };
+    if (temp < 70) return { color: 'text-green-400', label: 'Normal' };
+    if (temp < 85) return { color: 'text-yellow-400', label: 'Alerta' };
+    return { color: 'text-red-500', label: 'Crítico' };
 };
 
 const TemperaturePanel = ({ temps }) => {
-  return (
-    <Card title="Temperaturas e Fans" icon={FaThermometerHalf}>
-      <div className="flex flex-col gap-3">
-        <TempItem icon={FaTemperatureHigh} label="CPU" value={temps?.cpu} unit="°C" />
-        <TempItem icon={FaTemperatureHigh} label="CPU (Max)" value={temps?.cpuMax} unit="°C" />
-        <TempItem icon={SiNvidia} label="GPU" value={temps?.gpu} unit="°C" />
-        <TempItem icon={FaFan} label="Fan" value={temps?.fanRpm} unit=" RPM" />
-      </div>
-    </Card>
-  );
+    const cpuStatus = getTempStatus(temps?.cpu);
+
+    return (
+        <Card title="Monitoramento de Hardware" icon={FaThermometerHalf}>
+            <div className="flex flex-col gap-3 text-sm">
+                <div className="flex justify-between items-center">
+                    <span className="text-theme-text-muted">Temperatura da CPU</span>
+                    <span className={`font-bold ${cpuStatus.color}`}>{temps?.cpu ?? 'N/A'} °C ({cpuStatus.label})</span>
+                </div>
+                <div className="flex justify-between items-center">
+                    <span className="text-theme-text-muted">GPU</span>
+                    <span className="font-bold text-white">{temps?.gpu ? `${temps.gpu} °C` : 'Não Detectada'}</span>
+                </div>
+                 <div className="flex justify-between items-center">
+                    <span className="text-theme-text-muted">Fan</span>
+                    <span className="font-bold text-white">{temps?.fanRpm ? `${temps.fanRpm} RPM` : 'N/A'}</span>
+                </div>
+            </div>
+        </Card>
+    );
 };
 
 export default TemperaturePanel;
